@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anagram Solver & Word Unscrambler | Free Scramble Tool</title>
+  <meta name="description" content="Instant anagram solver and word unscrambler. Enter scrambled letters and wildcards to find valid words, calculate Scrabble point scores and group results by length.">
+
+  <!-- Favicons and App Icons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- Open Graph / SERP / Social Cards -->
+  <meta property="og:title" content="AnagramCraft: Advanced Anagram Solver & Scramble Word Finder">
+  <meta property="og:description" content="Unscramble letters, discover high-scoring subwords and find full anagrams instantly with Scrabble tile scoring and wildcard support.">
+  <meta property="og:image" content="og-image.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AnagramCraft: Advanced Anagram Solver">
+  <meta name="twitter:description" content="Unscramble letters, discover high-scoring subwords and find full anagrams instantly with wildcard support.">
+  <meta name="twitter:image" content="og-image.png">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Schema.org WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AnagramCraft Anagram Solver",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "description": "An interactive anagram solver, subword discovery engine and scramble word finder built for word game enthusiasts."
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <img src="favicon.svg" alt="AnagramCraft Logo" class="brand-logo-img" width="36" height="36">
+        <span class="brand-text">AnagramCraft</span>
+        <span class="brand-badge">Pro Solver</span>
+      </div>
+      <div class="header-status-badge">
+        <span>⚡ Client-Side Scramble Engine</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-wrapper">
+
+    <!-- Hero Intro -->
+    <section class="hero-intro">
+      <h1>Anagram Solver & Scramble Word Finder</h1>
+      <p>Enter any letter scramble to find valid anagrams, discover high-scoring subwords and calculate exact tournament tile points in milliseconds.</p>
+    </section>
+
+    <!-- Interactive Solver Card -->
+    <div class="solver-card">
+      <div class="input-zone">
+        
+        <div class="input-label-row">
+          <label for="lettersInput" class="field-label">Your Scrambled Letters</label>
+          <span class="field-hint">Use ? or * for blank wildcard tiles</span>
+        </div>
+
+        <div class="main-input-wrap">
+          <input type="text" id="lettersInput" class="letters-input" maxlength="14" placeholder="e.g. RETAIN?" autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Live Tile Preview -->
+        <div class="tile-preview-row" id="tilePreview"></div>
+
+        <!-- Advanced Filters Toggle -->
+        <button type="button" id="toggleFiltersBtn" class="advanced-filters-toggle">
+          <span>▼ Show Advanced Filters</span>
+        </button>
+
+        <!-- Collapsible Filters Drawer -->
+        <div class="filters-drawer" id="filtersDrawer">
+          <div class="filter-item">
+            <label for="filterStartsWith">Starts With</label>
+            <input type="text" id="filterStartsWith" class="filter-input" placeholder="e.g. RE" maxlength="6">
+          </div>
+          <div class="filter-item">
+            <label for="filterEndsWith">Ends With</label>
+            <input type="text" id="filterEndsWith" class="filter-input" placeholder="e.g. ING" maxlength="6">
+          </div>
+          <div class="filter-item">
+            <label for="filterContains">Contains</label>
+            <input type="text" id="filterContains" class="filter-input" placeholder="e.g. EA" maxlength="6">
+          </div>
+          <div class="filter-item">
+            <label for="filterExactLength">Exact Length</label>
+            <input type="number" id="filterExactLength" class="filter-input" placeholder="e.g. 7" min="3" max="14">
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons-row">
+          <button type="button" id="solveBtn" class="btn-primary">
+            <span>⚡ Unscramble Words</span>
+          </button>
+          <button type="button" id="clearBtn" class="btn-secondary">Clear</button>
+        </div>
+
+        <button type="button" id="sampleBtn" class="btn-sample">Try a random scramble</button>
+
+        <!-- Validation Alert -->
+        <div id="alertBox" class="alert-box"></div>
+
+      </div>
+
+      <!-- Live Results Container -->
+      <div id="resultsContainer" class="results-container">
+        
+        <!-- Single-line Candidate Notice -->
+        <div class="single-line-notice">
+          <span class="notice-icon">ℹ️</span>
+          <span><strong>Notice:</strong> Shows all lexically valid anagrams and subwords based on standard English tournament lexicons.</span>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+          <div class="stat-item">
+            <div class="stat-value" id="statWords">0</div>
+            <div class="stat-label">Words Formed</div>
+            <div class="stat-subtext">Valid dictionary matches</div>
+          </div>
+          <div class="stat-item stat-item-highlight">
+            <div class="stat-value" id="statTopScore">0 pts</div>
+            <div class="stat-label">🏆 Top Word Score</div>
+            <div class="stat-subtext">Highest single word value</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="statLongest">0 letters</div>
+            <div class="stat-label">Longest Candidate</div>
+            <div class="stat-subtext">Maximum word length</div>
+          </div>
+        </div>
+
+        <!-- Toolbar & Filter Tabs -->
+        <div class="results-toolbar">
+          <div class="length-tabs-group" id="lengthTabsContainer"></div>
+
+          <div class="sort-and-actions">
+            <select id="sortSelect" class="sort-select" aria-label="Sort words">
+              <option value="score-desc">Score: Highest First</option>
+              <option value="alpha">Alphabetical: A to Z</option>
+            </select>
+            <button type="button" id="copyAllBtn" class="btn-copy-all" title="Copy current word list">
+              <span>📋 Copy List</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Grouped Words Output Container -->
+        <div id="resultsOutput"></div>
+
+      </div>
+
+    </div>
+
+    <!-- Section 1: How to Use the Anagram Solver -->
+    <section class="content-section">
+      <h2>How to Use the Anagram Solver Effectively</h2>
+      <p>Whether you need to unscramble letters for Scrabble, solve tricky Wordle clues or find valid moves in Words With Friends, this solver gives you immediate answers with zero lag.</p>
+      
+      <ol class="steps-list">
+        <li class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Enter Your Letter Rack</h4>
+            <p>Type your scrambled letters into the main box. If you hold blank tiles in Scrabble, add a question mark (?) or asterisk (*) to represent wildcards.</p>
+          </div>
+        </li>
+        <li class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Apply Strategic Position Filters</h4>
+            <p>Open the advanced filters drawer to restrict words by specific prefixes, suffixes, contained letter pairs or precise word lengths.</p>
+          </div>
+        </li>
+        <li class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Inspect Point Values and Copy Words</h4>
+            <p>Click Unscramble Words to explore candidate terms grouped by length. Click any word card to copy it directly to your clipboard.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Section 2: How Anagram Algorithms Function -->
+    <section class="content-section">
+      <h2>Understanding Frequency Counting and Anagram Logic</h2>
+      <p>Human eyes often struggle to see anagrams because our brains seek familiar syllables. Computer algorithms solve letter scrambles through mathematical character frequency matching.</p>
+      
+      <h3>Character Frequency Buckets</h3>
+      <p>Every word in our 76,000-word dictionary is represented as a frequency map of its constituent letters. When you type RETAIN, the engine calculates the frequency of each character (R:1, E:1, T:1, A:1, I:1, N:1). It then checks whether a dictionary entry can be constructed entirely from those available counts.</p>
+
+      <h3>Wildcard Substitution Mechanics</h3>
+      <p>When you include a blank tile, the algorithm allows any single character shortfall to be fulfilled by your wildcard. This mimics official tournament board rules and enables you to spot high-scoring plays that would otherwise remain hidden.</p>
+    </section>
+
+    <!-- Section 3: High-Scoring Tactics for Word Games -->
+    <section class="content-section">
+      <h2>Tactical Advice for Scrabble and Word Game Solvers</h2>
+      <p>Winning board games requires more than just knowing long words. It requires playing letters that yield high scoring multipliers.</p>
+
+      <h3>1. Target High-Value Consonants</h3>
+      <p>Letters like Q (10 pts), Z (10 pts), J (8 pts) and X (8 pts) create explosive point swings. Always check if these premium letters can land on double or triple letter score squares before settling for standard vowel words.</p>
+
+      <h3>2. Master Two and Three Letter Hooks</h3>
+      <p>Experienced players memorize short words like QI, ZA, JO, AX and EX. Placing high-value letters across parallel rows scores points in two directions at the same time.</p>
+
+      <h3>3. Strive for the 50-Point Bingo Bonus</h3>
+      <p>In Scrabble, playing all seven tiles in a single turn awards a massive 50-point bonus known as a Bingo. Full anagrams that use every letter in your rack are highlighted with a star badge in our results grid.</p>
+    </section>
+
+    <!-- Section 4: The Strategic Companion Bridge (Single Contextual Backlink) -->
+    <section class="content-section">
+      <div class="companion-card">
+        <h3>Love Word Puzzles Like the NYT Spelling Bee?</h3>
+        <p>If you enjoy classic word games and anagrams, you likely enjoy daily word challenges like the New York Times Spelling Bee. While raw anagram solvers show every permutation, daily puzzle players often prefer subtle clues rather than flat answer lists that spoil the fun of discovery.</p>
+        <p>Visit <strong><a href="https://beedailyinsights.com" class="editorial-brand-link" target="_blank" rel="noopener">Spelling Bee Insights</a></strong> for daily spoiler-shielded hint ladders, two-letter frequency tallies, letter grid matrices and historical puzzle archives designed to guide you to Genius rank without spoiling the satisfaction of solving.</p>
+        <a href="https://beedailyinsights.com" class="companion-btn" target="_blank" rel="noopener">
+          <span>Explore Spelling Bee Insights</span>
+          <span>→</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="#lettersInput">Back to Solver</a>
+      </div>
+      <p>© 2026 AnagramCraft. An independent, free client-side word unscrambler for word game enthusiasts worldwide.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toastMsg" class="toast-msg">Copied to clipboard</div>
+
+  <!-- Scripts -->
+  <script src="words.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
