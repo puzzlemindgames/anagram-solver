@@ -779,6 +779,17 @@ body {
   margin-bottom: 1.25rem;
 }
 
+.editorial-brand-link {
+  color: var(--primary-indigo);
+  text-decoration: underline;
+  font-weight: 700;
+  transition: color 0.15s ease;
+}
+
+.editorial-brand-link:hover {
+  color: var(--primary-indigo-hover);
+}
+
 .companion-btn {
   display: inline-flex;
   align-items: center;
